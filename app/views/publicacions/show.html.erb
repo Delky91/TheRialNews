@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @publicacion %>
+
+<div>
+  <%= link_to "Edit this publicacion", edit_publicacion_path(@publicacion) %> |
+  <%= link_to "Back to publicacions", publicacions_path %>
+
+  <%= button_to "Destroy this publicacion", @publicacion, method: :delete %>
+</div>
