@@ -19,5 +19,13 @@ class User < ApplicationRecord
   has_many :posts
   has_many :comments
 
+  # Validaciones
   validates :email, presence: true, uniqueness: true
+
+  # Sistema de roles
+  ROLES = %w[user admin].freeze
+
+  def admin?
+    role == 'admin'
+  end
 end
