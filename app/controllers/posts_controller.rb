@@ -46,13 +46,13 @@ class PostsController < ApplicationController
         end
       end
     else
-      redirect_to root_path, alert: 'You Donnt Have Permission to edit this post'
+      redirect_to root_path, notice: 'You Donnt Have Permission to edit this post'
     end
   end
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
-    if current_user.admin? || current_user.id == @post.user_id
+    if user_can_modify_post?
       @post.destroy
 
       respond_to do |format|
