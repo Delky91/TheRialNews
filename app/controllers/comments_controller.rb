@@ -16,18 +16,21 @@ class CommentsController < ApplicationController
   end
 
   # GET /comments/1/edit
-  def edit; end
+  def edit
+    @post = Post.find(params[:post_id])
+    @comment = @post.comments.find(params[:id])
+  end
 
   # POST /comments or /comments.json
   def create
-    @comment = current_user.comments.build(comment_params)
-
+    @post = Post.find(params[:post_id])
+    @comment = @post.comments.build(comment_params.merge(user_id: current_user.id))
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to comment_url(@comment), notice: 'Comment was successfully created.' }
+        format.html { redirect_to post_path(@post), notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render 'posts/show', status: :unprocessable_entity }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
@@ -35,10 +38,12 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
+    @post = Post.find(params[:post_id])
+    @comment = @post.comments.find(params[:id])
     if user_can_modify_post?
       respond_to do |format|
         if @comment.update(comment_params)
-          format.html { redirect_to comment_url(@comment), notice: 'Comment was successfully updated.' }
+          format.html { redirect_to post_path(@post), notice: 'Comment was successfully updated.' }
           format.json { render :show, status: :ok, location: @comment }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -53,10 +58,11 @@ class CommentsController < ApplicationController
   # DELETE /comments/1 or /comments/1.json
   def destroy
     if user_can_modify_post?
+      @post = Post.find(params[:post_id])
+      @comment = @post.comments.find(params[:id])
       @comment.destroy
-
       respond_to do |format|
-        format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
+        format.html { redirect_to post_path(@post), notice: 'Comment was successfully deleted.' }
         format.json { head :no_content }
       end
     else
