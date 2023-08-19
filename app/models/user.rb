@@ -22,7 +22,7 @@ class User < ApplicationRecord
   # Validaciones
   validates :email, presence: true, uniqueness: true
 
-  # Sistema de roles
+  # Sistema de roles no podran agregarse más roles a no ser que se expesifiquen aqui
   ROLES = %w[user admin].freeze
 
   def admin?
