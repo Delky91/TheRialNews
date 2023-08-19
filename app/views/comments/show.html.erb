@@ -1,6 +1,6 @@
 <p style="color: green"><%= notice %></p>
 <%= render @comment %>
-<% if user_signed_in? && (comment.user == current_user || current_user.admin?) %>
+<% if user_signed_in? && (@comment.user == current_user || current_user.admin?) %>
   <div>
     <%= link_to "Edit this comment", edit_post_comment_path(@comment.post, @comment) %> |
     <%= link_to "Back to comments", post_comments_path(@comment.post) %>

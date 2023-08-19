@@ -14,8 +14,11 @@ one:
   title: MyString
   content: MyText
   user: one
+  post: one
 
 two:
   title: MyString
   content: MyText
   user: two
+  post: two
+

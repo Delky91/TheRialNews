@@ -4,15 +4,20 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
-    @comments = Comment.all
+    @post = Post.find(params[:post_id])
+    @comments = @post.comments
   end
 
   # GET /comments/1 or /comments/1.json
-  def show; end
+  def show
+    @post = Post.find(params[:post_id])
+    @comments = @post.comments
+  end
 
   # GET /comments/new
   def new
-    @comment = current_user.comments.build
+    @post = Post.find(params[:post_id])
+    @comment = @post.comments.build
   end
 
   # GET /comments/1/edit
@@ -40,7 +45,7 @@ class CommentsController < ApplicationController
   def update
     @post = Post.find(params[:post_id])
     @comment = @post.comments.find(params[:id])
-    if user_can_modify_post?
+    if user_can_modify_comment?
       respond_to do |format|
         if @comment.update(comment_params)
           format.html { redirect_to post_path(@post), notice: 'Comment was successfully updated.' }
@@ -57,7 +62,7 @@ class CommentsController < ApplicationController
 
   # DELETE /comments/1 or /comments/1.json
   def destroy
-    if user_can_modify_post?
+    if user_can_modify_comment?
       @post = Post.find(params[:post_id])
       @comment = @post.comments.find(params[:id])
       @comment.destroy
@@ -82,7 +87,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:title, :content)
   end
 
-  def user_can_modify_post?
-    current_user.admin? || current_user.id == @post.user.id
+  def user_can_modify_comment?
+    current_user.admin? || current_user.id == @comment.user.id
   end
 end

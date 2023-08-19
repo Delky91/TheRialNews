@@ -1,45 +1,53 @@
-require "test_helper"
+require 'test_helper'
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @post = posts(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get posts_url
     assert_response :success
   end
 
-  test "should get new" do
+  test 'should get new' do
+    sign_in users(:one)
     get new_post_url
     assert_response :success
   end
 
-  test "should create post" do
-    assert_difference("Post.count") do
-      post posts_url, params: { post: { content: @post.content, title: @post.title, user_id: @post.user_id } }
+  test 'should create post' do
+    sign_in users(:one)
+    assert_difference('Post.count') do
+      post posts_url, params: { post: { content: 'New Content', title: 'New Title', user_id: users(:one).id } }
     end
 
     assert_redirected_to post_url(Post.last)
   end
 
-  test "should show post" do
+  test 'should show post' do
     get post_url(@post)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
+    sign_in users(:one)
     get edit_post_url(@post)
     assert_response :success
   end
 
-  test "should update post" do
-    patch post_url(@post), params: { post: { content: @post.content, title: @post.title, user_id: @post.user_id } }
+  test 'should update post' do
+    sign_in users(:one)
+    patch post_url(@post),
+          params: { post: { content: 'Updated content test', title: 'Updated title test', user_id: @post.user_id } }
     assert_redirected_to post_url(@post)
   end
 
-  test "should destroy post" do
-    assert_difference("Post.count", -1) do
+  test 'should destroy post' do
+    sign_in users(:one)
+    assert_difference('Post.count', -1) do
       delete post_url(@post)
     end
 
