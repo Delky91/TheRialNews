@@ -24,18 +24,20 @@
   </div>
 <% end %>
 <!-- Formulario de comentarios -->
-<%= form_with(model: [ @post, @post.comments.build ], local: true, class:"border rounded-4 p-3 mw-100") do |form| %>
-  <div class="d-flex flex-column">
-    <div class="">
-      <%= form.label :title, class: "d-block mb-2" %>
-      <%= form.text_field :title, class:"w-100 p-2" %>
+<% if user_signed_in? %>
+  <%= form_with(model: [ @post, @post.comments.build ], local: true, class:"border rounded-4 p-3 mw-100") do |form| %>
+    <div class="d-flex flex-column">
+      <div class="">
+        <%= form.label :title, class: "d-block mb-2" %>
+        <%= form.text_field :title, class:"w-100 p-2" %>
+      </div>
+      <div class="my-3">
+        <%= form.label :content, class: "d-block mb-2" %>
+        <%= form.text_area :content, class:"w-100 pb-3 px-2 pt-1", placeholder: "Leave a comment here" %>
+      </div>
+      <div>
+        <%= form.submit "Add Comment", class: "btn btn-sm btn-outline-warning mt-3" %>
+      </div>
     </div>
-    <div class="my-3">
-      <%= form.label :content, class: "d-block mb-2" %>
-      <%= form.text_area :content, class:"w-100 pb-3 px-2 pt-1", placeholder: "Leave a comment here" %>
-    </div>
-    <div>
-      <%= form.submit "Add Comment", class: "btn btn-sm btn-outline-warning mt-3" %>
-    </div>
-  </div>
+  <% end %>
 <% end %>

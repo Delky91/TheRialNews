@@ -16,12 +16,16 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
+    return unless user_signed_in?
+
     @post = Post.find(params[:post_id])
     @comment = @post.comments.build
   end
 
   # GET /comments/1/edit
   def edit
+    return unless user_signed_in?
+
     @post = Post.find(params[:post_id])
     @comment = @post.comments.find(params[:id])
   end
@@ -30,6 +34,8 @@ class CommentsController < ApplicationController
   def create
     @post = Post.find(params[:post_id])
     @comment = @post.comments.build(comment_params.merge(user_id: current_user.id))
+    return unless user_can_modify_comment?
+
     respond_to do |format|
       if @comment.save
         format.html { redirect_to post_path(@post), notice: 'Comment was successfully created.' }
