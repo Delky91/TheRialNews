@@ -1,27 +1,41 @@
-<h2>Post</h2>
-<%= render @post %>
-<% if user_signed_in? && (@comment.user == current_user || current_user.admin?) %>
-  <div>
-    <%= link_to "Edit this post", edit_post_path(@post) %> |
-    <%= link_to "Back to posts", posts_path %>
-    <%= button_to "Destroy this post", @post, method: :delete %>
-  </div>
-<% end %>
-<h2>Comments</h2>
-<% @post.comments.each do |comment|%>
-  <div>
-    <h3><%= comment.title %></h3>
-    <p><%= comment.content %></p>
-  </div>
+<div class="p-3 border rounded-4">
+  <%= render @post %>
+  <!-- Botones y links del post -->
   <% if user_signed_in? && (@comment.user == current_user || current_user.admin?) %>
-    <%= link_to "Edit", edit_post_comment_path(@post, comment) %>
-    <%= link_to "Delete", post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <div class="d-flex gap-4 align-items-center">
+      <%= link_to "Edit this post", edit_post_path(@post), class:"link-warning m-0" %>
+      <%= link_to "Back to posts", posts_path, class:"link-warning m-0" %>
+      <%= button_to "Destroy this post", @post, method: :delete, class: "btn btn-sm btn-outline-danger mt-2" %>
+    </div>
   <% end %>
+</div>
+<!-- Comentarios del post -->
+<h2 class="my-5 display-6">Comments</h2>
+<% @post.comments.each do |comment|%>
+  <div class="border mb-4 p-3 rounded-4">
+    <p class="fs-4"><%= comment.title %></p>
+    <p><%= comment.content %></p>
+    <% if user_signed_in? && (@comment.user == current_user || current_user.admin?) %>
+      <div class="d-flex gap-3">
+        <%= link_to "Edit", edit_post_comment_path(@post, comment), class: "link-warning" %>
+        <%= link_to "Delete", post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: "link-warning" %>
+      </div>
+    <% end %>
+  </div>
 <% end %>
-<%= form_with(model: [ @post, @post.comments.build ], local: true) do |form| %>
-  <%= form.label :title %>
-  <%= form.text_field :title %>
-  <%= form.label :content %>
-  <%= form.text_area :content %>
-  <%= form.submit "Add Comment" %>
+<!-- Formulario de comentarios -->
+<%= form_with(model: [ @post, @post.comments.build ], local: true, class:"border rounded-4 p-3 mw-100") do |form| %>
+  <div class="d-flex flex-column">
+    <div class="">
+      <%= form.label :title, class: "d-block mb-2" %>
+      <%= form.text_field :title, class:"w-100 p-2" %>
+    </div>
+    <div class="my-3">
+      <%= form.label :content, class: "d-block mb-2" %>
+      <%= form.text_area :content, class:"w-100 pb-3 px-2 pt-1", placeholder: "Leave a comment here" %>
+    </div>
+    <div>
+      <%= form.submit "Add Comment", class: "btn btn-sm btn-outline-warning mt-3" %>
+    </div>
+  </div>
 <% end %>

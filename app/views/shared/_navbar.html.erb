@@ -9,7 +9,9 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light me-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Opciones</a>
           <ul class="dropdown-menu">
-            <li><%= button_to 'Cerrar sesión', destroy_user_session_path, class: 'dropdown-item', method: :delete %></li>
+            <% if user_signed_in? %>
+              <li><%= button_to 'Cerrar sesión', destroy_user_session_path, class: 'dropdown-item', method: :delete %></li>
+            <% end %>
             <li><%= link_to 'Iniciar sesión', new_user_session_path, class: 'dropdown-item'%></li>
             <li><hr class="dropdown-divider"></li>
             <li><%= link_to 'Registro', new_user_registration_path, class: 'dropdown-item'%></li>
